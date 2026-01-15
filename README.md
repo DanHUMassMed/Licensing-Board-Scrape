@@ -2,6 +2,8 @@
 
 A robust, object-oriented Python application that scrapes video links, and voting minutes from the Boston Licensing Board website, with built-in support for content downloading, PDF validation and processing, text extraction, deduplication monitoring, and edge case managemnt for exception pdfs.
 
+See the [Scraper Design Rationale](./docs/Scraper_Design_Rational.md) for an explanation of the design decisions behind this approach.
+
 ## 🏗️ High-Level Architecture
 
 The project utilizes a modular, service-based architecture to ensure maintainability and separation of concerns.
