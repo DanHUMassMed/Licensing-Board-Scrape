@@ -3,7 +3,6 @@ import logging
 from app.config import settings
 from app.parsers.html_parser import HtmlLinkExtractor
 from app.parsers.date_parser import DateParser
-from app.link_filters.video_link_separator import VideoLinkSeparator
 from app.storage.file_manager import JsonIO, StatsLogger
 
 logger = logging.getLogger(__name__)
@@ -16,7 +15,6 @@ class ScraperService:
         self.date_parser = DateParser()
         self.json_io = JsonIO()
         self.stats_logger = StatsLogger(settings.STATS_LOG_FILE)
-        self.video_separator = VideoLinkSeparator()
         self.filters = []  # List of filters with .process()
 
     def add_filter(self, filter_obj):
@@ -35,7 +33,7 @@ class ScraperService:
         
         stats = {"total_links": len(links)}
         
-        # Apply filters sequentially (e.g. ClientSide, ExcludeList)
+        # Apply filters sequentially (e.g. ClientSide, ExcludeList, VideoLink)
         filtered_links = links
         for f in self.filters:
             prev_len = len(filtered_links)
@@ -48,11 +46,10 @@ class ScraperService:
                 stats["client_side_links"] = removed_count
             elif "Exclude" in filter_name:
                 stats["excluded_links"] = removed_count
+            elif "Video" in filter_name:
+                stats["video_links"] = removed_count
 
-        # Separate Videos
-        logger.info("Separating video links...")
-        video_links, minutes_links = self.video_separator.process(filtered_links)
-        stats["video_links"] = len(video_links)
+        minutes_links = filtered_links
         stats["minutes_links"] = len(minutes_links)
 
         # Process Dates for Minutes
@@ -63,9 +60,6 @@ class ScraperService:
             processed_minutes.append(link)
 
         # Save Data
-        logger.info(f"Saving {len(video_links)} video links...")
-        self.json_io.save(video_links, settings.VIDEO_LINKS_FILE)
-
         logger.info(f"Saving {len(processed_minutes)} minutes links...")
         self.json_io.save(processed_minutes, settings.MINUTES_LINKS_FILE)
 
