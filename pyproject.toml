@@ -1,0 +1,11 @@
+[project]
+name = "licensing-board-scrape"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "beautifulsoup4>=4.14.3",
+    "pandas>=2.3.3",
+    "pikepdf>=10.2.0",
+    "pymupdf>=1.26.7",
+    "requests>=2.32.5",
+]
