@@ -41,7 +41,7 @@ graph TD
 ### Prerequisites
 
 * **Python 3.13+**
-* **macOS** (Recommended for `dev_setup.sh`)
+* **macOS/Linux** (Recommended for `dev_setup.sh`)
 * **uv** (Optional, but recommended for fast dependency management)
 
 ### Quick Start (macOS /Linux)
@@ -84,7 +84,7 @@ python -m app.main
 
 * `data/url_exclude_list.json`: List of URLs to exclude from scraping. (Updated by the DownloaderService if Link is not a PDF)
 * `data/hearing_video_links.json`: Collection of extracted YouTube/video links.
-* `data/voting_minutes_links.json`: Collection of voting minute PDF links. (With common date format parsed from href & body) 
+* `data/voting_minutes_links.json`: Collection of voting minute PDF links. (With common date format parsed from href & body)
 * `data/link_stats_log.csv`: Historical record of scraping statistics.
 * `voting_minutes_pdfs/`: The downloaded PDF files. (Detects duplicates, versions files when content differs, and skips identical files.)
 * `voting_minutes_txt/`: Text extracted from the PDFs.
