@@ -1,15 +1,18 @@
-import fitz  # PyMuPDF
 import logging
-from app.config import settings
+
+import fitz  # PyMuPDF
+
+from app import constants as const
 
 logger = logging.getLogger(__name__)
+
 
 class TextExtractorService:
     """Orchestrates text extraction from downloaded PDFs."""
 
     def __init__(self):
-        self.pdf_dir = settings.DOWNLOAD_DIR
-        self.output_dir = settings.TEXT_OUTPUT_DIR
+        self.pdf_dir = const.DOWNLOAD_DIR
+        self.output_dir = const.TEXT_OUTPUT_DIR
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
     def run(self):
@@ -27,16 +30,16 @@ class TextExtractorService:
 
         for pdf_file in pdf_files:
             self._process_file(pdf_file)
-            
+
         logger.info("Text extraction process completed.")
 
     def _process_file(self, pdf_file):
         output_file = self.output_dir / f"{pdf_file.stem}.txt"
-        
-        # Simple check to avoid re-extraction if desired, 
+
+        # Simple check to avoid re-extraction if desired,
         # but technically we might want to overwrite if PDF changed.
         # For now, we overwrite to ensure consistency.
-        
+
         text = self._extract_text(pdf_file)
         if text:
             try:

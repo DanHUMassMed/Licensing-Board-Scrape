@@ -15,17 +15,17 @@ graph TD
     Main --> Extractor[TextExtractorService]
 
     subgraph "Core Services"
-        Scraper -->|Parses HTML| Parser["HtmlLinkExtractor & DateParser"]
+        Scraper -->|Parses| Parser["HtmlLinkParser & DateParser"]
         Scraper -->|Filters Links| Filters[Link Filters]
-        Downloader -->|Fetches PDFs| PdfRepo[PdfRepository]
-        Extractor -->|Reads PDFs| PdfRepo
+        Downloader -->|Fetches PDFs| PdfStore[PDFStore]
+        Extractor -->|Reads PDFs| PdfStore
     end
 
     subgraph "Data Storage"
         Filters -->|Saves Videos| VideoJson["hearing_video_links.json"]
         Scraper -->|Saves Minutes| MinutesJson["voting_minutes_links.json"]
         Scraper -->|Logs Stats| CsvLog["link_stats_log.csv"]
-        PdfRepo -->|Stores Files| PdfFiles["voting_minutes_pdfs/"]
+        PdfStore -->|Stores Files| PdfFiles["voting_minutes_pdfs/"]
         Extractor -->|Saves Text| TxtFiles["voting_minutes_txt/"]
     end
 ```
@@ -36,14 +36,14 @@ graph TD
 * **`DownloaderService`**: management of file retrieval. It handles the downloading of PDFs, integrates with Google Drive links, and uses `PdfRepository` to ensure only unique content is saved (deduplication via hashing).
 * **`TextExtractorService`**: A post-processing service that converts the downloaded PDFs into raw text files using `PyMuPDF` for easier downstream analysis.
 * **`VideoLinkFilter`**: A specialized filter that intercepts YouTube/video links, saves them to their own dataset, and removes them from the primary processing pipeline.
-* **`PdfRepository`**: A robust storage handler that manages file versioning. If a file with the same name but different content is downloaded, it automatically increments a version suffix (e.g., `_v2.pdf`).
+* **`PDFStore`**: A robust storage handler that manages file versioning. If a file with the same name but different content is downloaded, it automatically increments a version suffix (e.g., `_v2.pdf`).
 
 ## 🚀 Setup & Installation
 
 ### Prerequisites
 
 * **Python 3.13+**
-* **macOS/Linux** (Recommended for `dev_setup.sh`)
+* **macOS / Linux** (Recommended for `dev_setup.sh`)
 * **uv** (Optional, but recommended for fast dependency management)
 
 ### Quick Start (macOS /Linux)
@@ -80,6 +80,19 @@ uv run python -m app.main
 
 # OR using standard python (with venv activated)
 python -m app.main
+```
+
+If you have `make` installed, you can also use the following commands:
+
+```bash
+# Run the application
+make run
+
+# Run linting and type checking
+make lint
+
+# Sync all dependencies
+make dev
 ```
 
 ### Outputs

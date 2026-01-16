@@ -1,7 +1,8 @@
 import logging
 import sys
-from pathlib import Path
-from app.config.settings import LOG_DIR
+
+from app import constants as const
+
 
 def setup_logging(name: str, log_filename: str = "app.log") -> logging.Logger:
     """
@@ -14,16 +15,16 @@ def setup_logging(name: str, log_filename: str = "app.log") -> logging.Logger:
     Returns:
         logging.Logger: Configured logger.
     """
-    LOG_DIR.mkdir(parents=True, exist_ok=True)
-    log_file_path = LOG_DIR / log_filename
+    const.LOG_DIR.mkdir(parents=True, exist_ok=True)
+    log_file_path = const.LOG_DIR / log_filename
 
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(levelname)s - %(message)s",
         handlers=[
             logging.FileHandler(log_file_path),
-            logging.StreamHandler(sys.stdout)
-        ]
+            logging.StreamHandler(sys.stdout),
+        ],
     )
-    
+
     return logging.getLogger(name)

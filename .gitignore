@@ -14,3 +14,9 @@ voting_minutes_txt/
 .DS_Store
 
 log.txt
+
+app.log
+
+*.pyc
+
+__pycache__/

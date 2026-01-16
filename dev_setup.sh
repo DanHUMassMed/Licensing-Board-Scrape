@@ -135,7 +135,7 @@ create_venv() {
 # --------------------------------------------------
 sync_dependencies() {
     log "🔄 Syncing dependencies..."
-    uv sync
+    uv sync --extra dev
 }
 
 # ==================================================
