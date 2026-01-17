@@ -1,7 +1,8 @@
 import logging
 from io import BytesIO
 from urllib.parse import urljoin
-
+from pathlib import Path
+import shutil
 import pikepdf
 import requests
 
@@ -48,6 +49,8 @@ class DownloaderService:
             if content:
                 self.pdf_repo.save_pdf(content, date_str)
 
+        self._copy_exception_pdfs(const.EXCEPTION_PDFS, const.DOWNLOAD_DIR)
+    
         logger.info("Download process completed.")
 
     def _download_pdf(self, href: str) -> bytes | None:
@@ -80,3 +83,30 @@ class DownloaderService:
                 return True
         except pikepdf.PdfError:
             return False
+
+
+    def _copy_exception_pdfs(self, source_dir: str, destination_dir: str) -> int:
+        """
+        Copy all *.pdf files from source_dir to destination_dir.
+
+        Args:
+            source_dir (str): Directory containing PDF files to copy
+            destination_dir (str): Directory to copy PDFs into
+
+        Returns:
+            int: Number of PDF files copied
+        """
+        src = Path(source_dir)
+        dst = Path(destination_dir)
+
+        if not src.exists() or not src.is_dir():
+            raise ValueError(f"Source directory does not exist or is not a directory: {src}")
+
+        dst.mkdir(parents=True, exist_ok=True)
+
+        pdf_files = list(src.glob("*.pdf"))
+
+        for pdf in pdf_files:
+            shutil.copy2(pdf, dst / pdf.name)
+
+        return len(pdf_files)

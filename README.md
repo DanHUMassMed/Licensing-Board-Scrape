@@ -16,7 +16,7 @@ graph TD
 
     subgraph "Core Services"
         Scraper -->|Parses| Parser["HtmlLinkParser & DateParser"]
-        Scraper -->|Filters Links| Filters[Link Filters]
+        Scraper -->|Filters Links| Filters[Link Filters :m:]
         Downloader -->|Fetches PDFs| PdfStore[PDFStore]
         Extractor -->|Reads PDFs| PdfStore
     end
@@ -25,6 +25,7 @@ graph TD
         Filters -->|Saves Videos| VideoJson["hearing_video_links.json"]
         Scraper -->|Saves Minutes| MinutesJson["voting_minutes_links.json"]
         Scraper -->|Logs Stats| CsvLog["link_stats_log.csv"]
+        Downloader -->|Exclude Filter| ExcludeJson["url_exclude_list.json"]
         PdfStore -->|Stores Files| PdfFiles["voting_minutes_pdfs/"]
         Extractor -->|Saves Text| TxtFiles["voting_minutes_txt/"]
     end
