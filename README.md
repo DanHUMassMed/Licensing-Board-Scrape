@@ -75,6 +75,9 @@ If you prefer not to use `uv` or are on a different OS, you can use standard Pyt
 The application is designed to be run as a single module. This triggers the entire pipeline: Scraping -> Downloading -> Extraction.
 
 ```bash
+# Activate the virtual Environment
+source .venv/bin/activate
+
 # Using uv
 uv run python -m app.main
 

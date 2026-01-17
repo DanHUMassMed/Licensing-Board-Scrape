@@ -41,6 +41,7 @@ class TextExtractorService:
         # For now, we overwrite to ensure consistency.
 
         text = self._extract_text(pdf_file)
+        text = self._strip_non_ascii(text)
         if text:
             try:
                 with open(output_file, "w", encoding="utf-8") as f:
@@ -59,9 +60,16 @@ class TextExtractorService:
                 text = page.get_text()
                 if text.strip():
                     all_text.append(text.strip())
-                    all_text.append("\n-------------------------\n")
+                    #all_text.append("\n-------------------------\n")
             doc.close()
             return "\n".join(all_text)
         except Exception as e:
             logger.error(f"Error extracting text from {pdf_path}: {e}")
             return ""
+
+    def _strip_non_ascii(self, text: str) -> str:
+        """
+        Remove all non-ASCII characters from text.
+        Keeps characters in the range 0–127.
+        """
+        return text.encode("ascii", errors="ignore").decode("ascii")
