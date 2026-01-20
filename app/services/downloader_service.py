@@ -39,9 +39,6 @@ class DownloaderService:
                 logger.warning(f"Skipping malformed item: {item}")
                 continue
 
-            # Check exclude list again in case it was updated manually or by previous run
-            # Re-loading every time might be inefficient but ensures safety if multiple processes run
-            # For now, we rely on the in-memory set from init.
             if href in self.exclude_filter.exclude_items:
                 continue
 

@@ -6,7 +6,15 @@ See the [Scraper Design Rationale](./docs/Scraper_Design_Rational.md) for an exp
 
 ## 🏗️ High-Level Architecture
 
-The project utilizes a modular, service-based architecture to ensure maintainability and separation of concerns.
+The project utilizes a modular, **service-based architecture** to ensure maintainability and separation of concerns.
+
+### ⚙️ Services Process Flow
+
+**Scraper Service**: 1. Use *LinkParser* to read all links on the page, 2. Runs *Filter Links* to remove known NON PDF links, 3. Save PDF links (aka Meeting Minutes)), 4. Create a summary stats log
+
+**Download Service**: 1. Loads and iterates on voting minutes links, 2. Downloads PDF based on URL (w/ google.drive handler) 3. Tests URL for exclude list qualification. 4. Download PDF Exceptions
+
+**TextExtractor Service**: 1. Read voting_miniutes_pdfs directory, 2. Write PyMuPDF striped text to voting_minites_txt
 
 ```mermaid
 graph TD

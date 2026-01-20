@@ -6,6 +6,8 @@ A deliberately simple and resilient approach to scraping PDF documents from the 
 
 This design minimizes assumptions about how the site structures its URLs and reduces the need for ongoing code changes as the site evolves.
 
+<img src="./ChatGPT_Image.png" width=600 alt="ChatGPT Image"/>
+
 ## How the Scraper Works
 
 The scraper follows a straightforward process:
@@ -35,7 +37,6 @@ When a new URL is added to the page:
 
 * **If it is a PDF**
   → It is automatically included, with **no code changes required**.
-
 * **If it is not a PDF**
   → An attempted PDF download will fail, making the issue immediately visible (in the logs).
   → The URL is then added to the exclusion list, self-healing the scraper on future runs.

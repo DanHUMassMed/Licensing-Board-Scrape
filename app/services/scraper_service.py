@@ -26,6 +26,7 @@ class ScraperService:
 
     def run(self):
         logger.info(f"Fetching {const.TARGET_URL}...")
+        # 1. Fetch HTML and extract all links
         try:
             html = self._fetch_html(const.TARGET_URL)
         except RuntimeError as e:
@@ -37,7 +38,7 @@ class ScraperService:
 
         stats = {"total_links": len(links)}
 
-        # Apply filters sequentially (e.g. ClientSide, ExcludeList, VideoLink)
+        # 2. Apply filters sequentially (e.g. ClientSide, ExcludeList, VideoLink)
         filtered_links = links
         for f in self.filters:
             prev_len = len(filtered_links)
@@ -56,7 +57,7 @@ class ScraperService:
         minutes_links = filtered_links
         stats["minutes_links"] = len(minutes_links)
 
-        # Process Dates for Minutes
+        # 3. Extract dates from minutes links and save to JSON
         logger.info("Extracting dates...")
         processed_minutes = []
         for link in minutes_links:
@@ -67,7 +68,7 @@ class ScraperService:
         logger.info(f"Saving {len(processed_minutes)} minutes links...")
         self.json_io.save(processed_minutes, const.MINUTES_LINKS_FILE)
 
-        # Log Stats
+        # 4. Log stats
         logger.info("Link stats:")
         for k, v in stats.items():
             logger.info(f"{k}: {v}")
