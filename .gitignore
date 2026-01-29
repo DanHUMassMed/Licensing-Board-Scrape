@@ -15,7 +15,7 @@ voting_minutes_txt/
 
 log.txt
 
-app.log
+#app.log
 
 *.pyc
 
