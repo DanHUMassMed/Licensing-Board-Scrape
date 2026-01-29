@@ -32,10 +32,10 @@ def main():
         downloader = DownloaderService()
         downloader.run()
 
-        # 3. Run Text Extractor
-        logger.info("Initializing Text Extractor Service...")
-        extractor = TextExtractorService()
-        extractor.run()
+        # # 3. Run Text Extractor
+        # logger.info("Initializing Text Extractor Service...")
+        # extractor = TextExtractorService()
+        # extractor.run()
 
         logger.info("Application finished successfully.")
     finally:
