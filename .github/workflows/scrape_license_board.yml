@@ -1,0 +1,47 @@
+name: Run Licensing Board Scraper
+
+on:
+  schedule:
+    - cron: "0 0 * * 1" # Runs at midnight every Monday
+    
+  workflow_dispatch: # Allows manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+
+      - name: Sync dependencies (from uv.lock)
+        working-directory: ./scraper/scrape
+        run: uv sync --frozen
+
+      - name: Run Scraper
+        working-directory: ./scraper/scrape
+        run: uv run python -m app.main
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add scraper/scrape/data/url_exclude_list.json
+          git add scraper/scrape/data/link_stats_log.csv
+          git add scraper/scrape/data/hearing_video_links.json
+          git add scraper/scrape/data/voting_minutes_links.json
+          git add scraper/scrape/voting_minutes_pdfs/
+          git add scraper/scrape/log/app.log
+          git diff --quiet && git diff --staged --quiet || (
+            git commit -m "[SCRAPER] Update scraped data and PDFs" && git push
+          )
