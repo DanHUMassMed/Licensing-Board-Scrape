@@ -1,0 +1,2 @@
+This worked for pushing Git Action that did not accept that my token has workflow permissions
+git -c credential.helper= push https://github.com/DanHUMassMed/Licensing-Board-Scrape.git
