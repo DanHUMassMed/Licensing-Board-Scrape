@@ -25,11 +25,11 @@ jobs:
         run: curl -LsSf https://astral.sh/uv/install.sh | sh
 
       - name: Sync dependencies (from uv.lock)
-        working-directory: ./scraper/scrape
+        working-directory: ./
         run: uv sync --frozen
 
       - name: Run Scraper
-        working-directory: ./scraper/scrape
+        working-directory: ./
         run: uv run python -m app.main
 
       - name: Commit and push changes
